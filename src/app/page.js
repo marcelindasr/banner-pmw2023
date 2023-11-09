@@ -7,7 +7,7 @@ import './globals.css'
 export default function Home() {
 
   const [bravo, setBravo] = useState(0)
-  const [nama, setNama] = useState('Marcelinda Starlynn Runtono')
+  const [nama, setNama] = useState('Marcelinda Starlynn')
 
   function handlerTambahBravo(){
     setBravo(bravo + 1)
