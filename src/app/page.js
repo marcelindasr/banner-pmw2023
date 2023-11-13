@@ -13,7 +13,6 @@ export default function Home() {
     setNama('Linda')
   }
 
-  
   function handlerGantiNama(){
 
     if (inputText.trim() !== '') {
@@ -27,6 +26,12 @@ export default function Home() {
   function handleInputChange(event) {
     setInputText(event.target.value)
   }
+
+  document.addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+      handlerGantiNama();
+    }
+  });  
   
   return (
     <div className='body'>
@@ -59,6 +64,7 @@ export default function Home() {
               type="text"
               value={inputText}
               onChange={handleInputChange}
+              placeholder="Write your name"
             />
           <div className='cta-button' 
             style={{
