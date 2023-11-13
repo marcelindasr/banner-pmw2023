@@ -6,17 +6,27 @@ import './globals.css'
 
 export default function Home() {
 
-  const [bravo, setBravo] = useState(0)
   const [nama, setNama] = useState('Marcelinda Starlynn')
-
-  function handlerTambahBravo(){
-    setBravo(bravo + 1)
-  }
+  const [inputText, setInputText] = useState('')
 
   function handlerGantiNama(){
     setNama('Linda')
   }
+
   
+  function handlerGantiNama(){
+
+    if (inputText.trim() !== '') {
+      setNama(inputText)
+      setInputText('')
+    } else {
+      setInputText('')
+    }
+  }
+
+  function handleInputChange(event) {
+    setInputText(event.target.value)
+  }
   
   return (
     <div className='body'>
@@ -39,23 +49,24 @@ export default function Home() {
             <div className="bio-nim-header-banner">
             {/* NIM dan BIO*/}
             <p>D121211036</p>
-            <p>Bravo {bravo}, going dark</p>
+            <p>Believe in yourself</p>
             </div>
           </div>
         </div>
         <div className="cta-banner-wrapper">
           {/* Tombol CTA */}
-            <div className='cta-button' onClick={handlerTambahBravo}>
-              <p>Halo!</p>
-            </div>
-            <div className='cta-button' 
+          <input
+              type="text"
+              value={inputText}
+              onChange={handleInputChange}
+            />
+          <div className='cta-button' 
             style={{
               marginTop: '12px'
-            }}
-            
+            }} 
             onClick={handlerGantiNama}>
-              <p>Ganti Nama</p>
-            </div>
+            <p>Change Name</p>
+          </div>
         </div>
       </div>
     </div>
