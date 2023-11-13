@@ -27,11 +27,14 @@ export default function Home() {
     setInputText(event.target.value)
   }
 
-  document.addEventListener("keydown", function(event) {
-    if (event.key === "Enter") {
-      handlerGantiNama();
-    }
-  });  
+  if (typeof window !== 'undefined') {
+    document.addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        handlerGantiNama();
+      }
+    });
+  }
+  
   
   return (
     <div className='body'>
