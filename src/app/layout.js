@@ -1,3 +1,5 @@
+import Navbar from '@components/navbar/navbar'
+import '@styles/global.css'
 
 export const metadata = {
   title: 'Marcelinda S.R',
@@ -7,7 +9,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html>
-      <body>{children}</body>
+      <body>
+        <Navbar/>
+        {children}
+      </body>
     </html>
   )
 }

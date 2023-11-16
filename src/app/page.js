@@ -2,16 +2,12 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
-import './globals.css'
+import '@styles/home.css'
 
 export default function Home() {
 
   const [nama, setNama] = useState('Marcelinda Starlynn')
   const [inputText, setInputText] = useState('')
-
-  function handlerGantiNama(){
-    setNama('Linda')
-  }
 
   function handlerGantiNama(){
 
@@ -37,7 +33,7 @@ export default function Home() {
   
   
   return (
-    <div className='body'>
+    <>
       <div className="banner-container">
         {/* Kartunya */}
         <div className="header-banner-wrapper">
@@ -78,6 +74,6 @@ export default function Home() {
           </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
