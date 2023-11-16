@@ -10,10 +10,6 @@ export default function Home() {
   const [inputText, setInputText] = useState('')
 
   function handlerGantiNama(){
-    setNama('Linda')
-  }
-
-  function handlerGantiNama(){
 
     if (inputText.trim() !== '') {
       setNama(inputText)
