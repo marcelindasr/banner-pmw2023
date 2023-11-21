@@ -10,13 +10,8 @@ export default function Home() {
   const [inputText, setInputText] = useState('')
 
   function handlerGantiNama(){
-
-    if (inputText.trim() !== '') {
-      setNama(inputText)
-      setInputText('')
-    } else {
-      setInputText('')
-    }
+    setNama(inputText)
+    setInputText('')
   }
 
   function handleInputChange(event) {
@@ -29,6 +24,15 @@ export default function Home() {
         handlerGantiNama();
       }
     });
+  }
+
+  function handleClick() {
+    if (inputText.trim() === '') {
+      alert('Input is empty!'); // Menampilkan alert jika input kosong
+      setInputText('')
+    } else {
+      handlerGantiNama(); // Memanggil fungsi ganti nama jika input tidak kosong
+    }
   }
   
   
@@ -65,12 +69,15 @@ export default function Home() {
               onChange={handleInputChange}
               placeholder="Write your name"
             />
-          <div className='cta-button' 
+          <div
+            className={`cta-button ${inputText.trim() === '' ? 'disabled' : ''}`}
             style={{
-              marginTop: '12px'
-            }} 
-            onClick={handlerGantiNama}>
-            <p>Change Name</p>
+              marginTop: '12px',
+              backgroundColor: inputText.trim() === '' ? '#ccc' : '', // Warna abu-abu saat tombol dinonaktifkan
+            }}
+            onClick={handleClick} // Menggunakan handleClick yang menangani logika klik tombol
+          >
+            <p>{inputText.trim() === '' ? 'Disabled' : 'Change Name'}</p>
           </div>
         </div>
       </div>
