@@ -60,7 +60,7 @@ p{
 
 .cta-button{
   display: flex;
-  padding: 10px 100px;
+  padding: 10px 0px;
   justify-content: center;
   align-items: center;
   gap: 10px;
