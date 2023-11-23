@@ -25,4 +25,5 @@ body{
     align-items: center;
     justify-content: flex-start;
     font-family: Plus Jakarta Sans;
+    overflow-x: hidden;
   }
