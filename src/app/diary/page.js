@@ -1,36 +1,80 @@
-"use client";
-
+"use client"
 import "@styles/diary.css";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Link from 'next/link';
+import Link from "next/link";
 
 export default function Diary() {
-  const [judul, setJudul] = useState([]);
-  const [isiDiary, setIsiDiary] = useState([]);
-  const [isLoading, setIsLoading] = useState(true); 
+  const [getJudul, setGetJudul] = useState([]);
+  const [getIsiDiary, setGetIsiDiary] = useState([]);
+  const [getKoleksiData, setGetKoleksiData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false); // Tambahkan state isLoading
 
   const endpointAPI = "https://6555c4c184b36e3a431e4a9e.mockapi.io/diaryku";
 
   async function getDiary() {
+    setIsLoading(true); // Atur isLoading menjadi true saat mengambil data
     try {
       const res = await axios.get(endpointAPI);
-      const data = res.data;
+      const dataJSON = res.data;
 
-      //ambil judul
-      const judul = data.map((item) => item.judul);
-      setJudul(judul);
+      setGetKoleksiData(dataJSON);
 
-      //ambil isi_diary
-      const isi_diary = data.map((item) => item.isi_diary);
-      setIsiDiary(isi_diary);
+      const judul = dataJSON.map((item) => item.judul);
+      setGetJudul(judul);
 
-      setIsLoading(false); // Set loading to false after data is fetched
+      const isi_diary = dataJSON.map((item) => item.isi_diary);
+      setGetIsiDiary(isi_diary);
+
+      setIsLoading(false); // Atur isLoading menjadi false setelah data berhasil diambil
     } catch (error) {
       console.error("Error fetching data:", error);
-      setIsLoading(false); // Set loading to false in case of an error
+      setIsLoading(false); // Atur isLoading menjadi false dalam kasus error
     }
   }
+
+  async function postDiary() {
+    const updatedDiary = [
+      ...getKoleksiData,
+      { judul: postTulisJudul, isi_diary: postTulisDiary },
+    ];
+
+    setGetKoleksiData(updatedDiary);
+    setPostTulisJudul("");
+    setPostTulisDiary("");
+
+    try {
+      const res = await axios.post(endpointAPI, {
+        judul: postTulisJudul,
+        isi_diary: postTulisDiary,
+      });
+
+      if (res.status >= 200 && res.status < 300) {
+        getDiary();
+      } else {
+        throw new Error("Network response was not ok");
+      }
+    } catch (error) {
+      alert("Failed to post data: " + error);
+    }
+  }
+
+  const [postTulisJudul, setPostTulisJudul] = useState("");
+  const [postTulisDiary, setPostTulisDiary] = useState("");
+
+  const handleInputJudul = (event) => {
+    setPostTulisJudul(event.target.value);
+  };
+
+  const handleInputIsiDiary = (event) => {
+    setPostTulisDiary(event.target.value);
+  };
+
+  const handleKeyEnter = (e) => {
+    if (e.key === "Enter") {
+      postDiary();
+    }
+  };
 
   useEffect(() => {
     getDiary();
@@ -38,26 +82,63 @@ export default function Diary() {
 
   return (
     <div>
-      {isLoading ? ( // Check loading state
+      {/* Bagian POST DIARY */}
+      <div className="banner-container">
+        <div className="cta-banner-wrapper">
+          {/* Tombol CTA */}
+          <input
+            name="input-judul"
+            type="text"
+            placeholder="Tuliskan judulmu.."
+            onChange={handleInputJudul}
+            onKeyDown={handleKeyEnter}
+            value={postTulisJudul}
+          />
+          <input
+            name="input-diary"
+            type="text"
+            placeholder="Tuliskan isi diarymu.."
+            onChange={handleInputIsiDiary}
+            onKeyDown={handleKeyEnter}
+            value={postTulisDiary}
+          />
+          {postTulisJudul && postTulisDiary ? (
+            <div className="cta-button" onClick={postDiary}>
+              <p>Submit Diary</p>
+            </div>
+          ) : (
+            <div
+              className="cta-button disabled"
+              onClick={() => alert("Isi terlebih dahulu!")}
+            >
+              <p>Disabled</p>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Bagian MAP LIST DIARY */}
+      {isLoading ? (
         "API is loading"
-      ) : judul.length > 0 ? (
+      ) : getKoleksiData.length > 0 ? (
         <ul>
-          {judul.map((item, idx) => (
-            <Link href={`/diary/${item}/${isiDiary[idx]}`}>
-
-            <li key={idx}> {/* Add key prop for list items */}
-            
-              <div className={`diary-container ${idx === judul.length -1? 'last-item' : ''}`}>
-                <h1>{judul[idx]}</h1>
-                <p className="p-diary">{isiDiary[idx]}</p>
-              </div>
-            </li>
-
-            </Link> 
+          {getJudul.map((item, idx) => (
+            <Link key={idx} href={`/diary/${item}/${getIsiDiary[idx]}`}>
+              <li key={idx}>
+                <div
+                  className={`diary-container ${
+                    idx === getJudul.length - 1 ? "last-item" : ""
+                  }`}
+                >
+                  <h1>{getJudul[idx]}</h1>
+                  <p className="p-diary">{getIsiDiary[idx]}</p>
+                </div>
+              </li>
+            </Link>
           ))}
         </ul>
       ) : (
-        "API not loading"
+        "API is not loading"
       )}
     </div>
   );
